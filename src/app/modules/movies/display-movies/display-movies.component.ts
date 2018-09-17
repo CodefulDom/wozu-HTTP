@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+import { of } from 'rxjs';
+import { Movie } from "../../../shared/models/movies";
 
 @Component({
   selector: 'app-display-movies',
@@ -6,10 +10,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./display-movies.component.css']
 })
 export class DisplayMoviesComponent implements OnInit {
+  private moviesRoute = 'http://localhost:3000/movies';
+  public movies: Movie[];
 
-  constructor() { }
+  constructor(private http: HttpClient) {}
 
-  ngOnInit() {
+  getMovies() {
+    this.http.get<Movie[]>(this.moviesRoute).subscribe(movies => {
+      this.movies = movies;
+      console.log('Movies', this.movies);
+    });
   }
-
+  ngOnInit() {
+    this.getMovies();
+  }
 }
